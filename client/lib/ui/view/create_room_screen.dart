@@ -50,10 +50,10 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
             SizedBox(height: size.height * 0.05),
             CustomTextField(
               controller: _nameController,
-              hintText: 'Enter your nickname',
+              hintText: '닉네임을 입력하세요',
             ),
             SizedBox(height: size.height * 0.045),
-            CustomButton(onTap: () {}, text: 'Create'),
+            CustomButton(onTap: () {}, text: '시작'),
           ],
         ),
       ),
