@@ -10,6 +10,7 @@ abstract class AppColors {
   static const pinkLogoColor = Color(0xFFD6547A);
 
   static const inputBgColor = Color(0xFFF5F5F5);
+  static const bgColor = Color(0xFF2C3E50);
 
   static const black = Colors.black;
   static const darkGray = Color(0xFF404040);
