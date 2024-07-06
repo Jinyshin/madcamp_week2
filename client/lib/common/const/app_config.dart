@@ -1,8 +1,9 @@
 import 'dart:io';
 
-class AppConfig {
-  static String baseUrl =
-      Platform.isAndroid ? 'http://10.0.2.2:8000' : 'http://127.0.0.1:8000';
+abstract class AppConfig {
+  // static String localHost = Platform.isAndroid ? '10.0.2.2' : '127.0.0.1';
+  static String localHost = '127.0.0.1';
+  static String baseUrl = 'http://$localHost:3000';
   static const String signInUrl = 'auth/signin';
   static const String signUpUrl = 'users/registration';
   static const String logOutUrl = 'users/logout';

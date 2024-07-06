@@ -1,7 +1,6 @@
-import 'package:client/common/const/app_colors.dart';
 import 'package:client/common/widgets/custom_auth_button.dart';
-import 'package:client/common/widgets/custom_text.dart';
 import 'package:client/common/widgets/custom_textfield.dart';
+import 'package:client/data/services/socket_service.dart';
 import 'package:flutter/material.dart';
 
 class CreateRoomScreen extends StatefulWidget {
@@ -14,6 +13,7 @@ class CreateRoomScreen extends StatefulWidget {
 
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
   final TextEditingController _nameController = TextEditingController();
+  final SocketService _socketService = SocketService();
 
   @override
   void initState() {
@@ -53,7 +53,9 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
               hintText: '닉네임을 입력하세요',
             ),
             SizedBox(height: size.height * 0.045),
-            CustomButton(onTap: () {}, text: '시작'),
+            CustomButton(
+                onTap: () => _socketService.createRoom(_nameController.text),
+                text: '시작'),
           ],
         ),
       ),
