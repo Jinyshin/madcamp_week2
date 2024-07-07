@@ -4,7 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class ImageGameScreen extends StatefulWidget {
-  const ImageGameScreen({super.key});
+  final String title;
+  const ImageGameScreen({super.key, required this.title});
 
   @override
   _ImageGameScreenState createState() => _ImageGameScreenState();
@@ -15,7 +16,7 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Face Similarity Example'),
+        title: Text(widget.title),
       ),
       body: Center(
         child: ElevatedButton(

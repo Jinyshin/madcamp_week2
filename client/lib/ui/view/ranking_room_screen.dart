@@ -11,7 +11,7 @@ class RankingScreen extends StatefulWidget {
 
 class _RankingScreenState extends State<RankingScreen> {
   // TODO: get game list from server
-  final List<String> games = ['두더지 팡팡', '넌 나고 난 너', '라이어 게임', '훈민정음'];
+  final List<String> games = ['두더지 팡팡', '닮은 사람 찾기', '라이어 게임', '훈민정음'];
   String selectedGame = '두더지 팡팡';
 
   // TODO: get game ranking list from server
@@ -21,7 +21,7 @@ class _RankingScreenState extends State<RankingScreen> {
       {'title': '지녕', 'rank': 2, 'score': 90},
       {'title': '지니신', 'rank': 3, 'score': 80},
     ],
-    '넌 나고 난 너': [
+    '닮은 사람 찾기': [
       {'title': '유하', 'rank': 1, 'score': 95},
       {'title': '유하하하', 'rank': 2, 'score': 85},
       {'title': '유하핫', 'rank': 3, 'score': 75},

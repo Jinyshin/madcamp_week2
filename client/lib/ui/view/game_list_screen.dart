@@ -14,7 +14,7 @@ class _GameListScreenState extends State<GameListScreen> {
   // TODO: Get data from Server
   final List<Map<String, String>> games = [
     {'title': '두더지 팡팡', 'subtitle': '최대한 빠르게 두더지를 때려봅시다!', 'id': '1'},
-    {'title': '넌 나고 난 너', 'subtitle': '가장 닮은 사람 둘 마셔!', 'id': '2'},
+    {'title': '닮은 사람 찾기', 'subtitle': '가장 닮은 사람 둘 마셔!', 'id': '2'},
     {'title': '라이어 게임', 'subtitle': '누구인가.. 누가 라이어소리를 내었어...', 'id': '3'},
     {'title': '훈민정음', 'subtitle': '한국어 좀 치는 분들 모이세요', 'id': '4'},
   ];

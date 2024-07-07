@@ -1,4 +1,6 @@
 import 'package:client/common/widgets/custom_elevated_button.dart';
+import 'package:client/ui/view/game/dudeoji_game_screen.dart';
+import 'package:client/ui/view/game/image_game_screen.dart';
 import 'package:flutter/material.dart';
 
 class GameWaitScreen extends StatelessWidget {
@@ -10,6 +12,29 @@ class GameWaitScreen extends StatelessWidget {
     required this.title,
     required this.gameId,
   });
+
+  void _startGame(BuildContext context) {
+    Widget screen;
+    switch (gameId) {
+      case '1':
+        screen = DudeojiGameScreen(title: title);
+        break;
+      case '2':
+        screen = ImageGameScreen(title: title);
+        break;
+      // 다른 gameId에 맞는 화면 추가
+      default:
+        screen = const Scaffold(
+          body: Center(child: Text('Game not found')),
+        );
+        break;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +81,7 @@ class GameWaitScreen extends StatelessWidget {
               ),
               const SizedBox(height: 60),
               CustomButton(
-                onTap: () {},
+                onTap: () => _startGame(context),
                 text: '시작하기',
               ),
             ],
