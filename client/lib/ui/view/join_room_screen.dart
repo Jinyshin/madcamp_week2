@@ -1,4 +1,4 @@
-import 'package:client/common/widgets/custom_auth_button.dart';
+import 'package:client/common/widgets/custom_elevated_button.dart';
 import 'package:client/common/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +11,6 @@ class JoinRoomScreen extends StatefulWidget {
 }
 
 class _JoinRoomScreenState extends State<JoinRoomScreen> {
-  final TextEditingController _nicknameController = TextEditingController();
   final TextEditingController _gameIdController = TextEditingController();
 
   @override
@@ -22,7 +21,6 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
   @override
   void dispose() {
     super.dispose();
-    _nicknameController.dispose();
     _gameIdController.dispose();
   }
 
@@ -31,6 +29,15 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: const Text('방 찾기'),
+      ),
       body: Container(
         margin: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -39,26 +46,16 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              "방 찾기",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
-            ),
-            SizedBox(height: size.height * 0.05),
-            CustomTextField(
-              controller: _nicknameController,
-              hintText: '닉네임을 입력하세요',
-            ),
             const SizedBox(height: 16),
             CustomTextField(
               controller: _gameIdController,
               hintText: '방 번호를 입력하세요',
             ),
             SizedBox(height: size.height * 0.045),
-            CustomButton(onTap: () {}, text: '참가하기'),
+            CustomButton(
+              onTap: () {},
+              text: '참가하기',
+            ),
           ],
         ),
       ),

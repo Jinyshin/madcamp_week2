@@ -19,12 +19,12 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-        minimumSize: Size(width / 5, 50),
+        minimumSize: Size(width / 2, 50),
         backgroundColor: AppColors.faintGray,
       ),
       child: Text(
         text,
-        style: authBtnTextStyle,
+        style: elevatedBtnTextStyle,
       ),
     );
   }
