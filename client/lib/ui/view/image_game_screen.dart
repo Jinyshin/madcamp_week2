@@ -15,14 +15,14 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Face Similarity Example'),
+        title: const Text('Face Similarity Example'),
       ),
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
             await detectFaceSimilarity();
           },
-          child: Text('Detect Face Similarity'),
+          child: const Text('Detect Face Similarity'),
         ),
       ),
     );
@@ -50,8 +50,10 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
     List<int> byteList2 = byteData2.buffer.asUint8List();
 
     // Add files to the request
-    request.files.add(http.MultipartFile.fromBytes('face1', byteList1, filename: 'sample_1.png'));
-    request.files.add(http.MultipartFile.fromBytes('face2', byteList2, filename: 'sample_2.png'));
+    request.files.add(http.MultipartFile.fromBytes('face1', byteList1,
+        filename: 'sample_1.png'));
+    request.files.add(http.MultipartFile.fromBytes('face2', byteList2,
+        filename: 'sample_2.png'));
     request.fields['threshold'] = '0.8';
 
     // Send the request
@@ -64,4 +66,3 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
     print(response.body);
   }
 }
-
