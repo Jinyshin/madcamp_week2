@@ -1,9 +1,14 @@
-const express = require('express');
-const { createServer } = require('http');
-const { join } = require('path');
-const mongoose = require('mongoose');
-const { Server } = require('socket.io');
-const Room = require('./models/room_model');
+import express from 'express';
+import { createServer } from 'http';
+import { join } from 'path';
+import mongoose from 'mongoose';
+import { Server } from 'socket.io';
+// import Room from './models/room_model.js';
+import { tempRouter } from './src/routes/temp.routes.js';
+import { response } from './config/response.js';
+import { status } from './config/response.status.js';
+import { BaseError } from './config/error.js';
+
 const port = process.env.PORT || 3000;
 
 const app = express();
@@ -14,18 +19,18 @@ const DB =
   'mongodb+srv://jinyshin:1234@gamecluster.rxdktyn.mongodb.net/?retryWrites=true&w=majority&appName=GameCluster';
 
 // TODO: flutter랑 연결하기
-app.get('/', (req, res) => {
-  res.sendFile(join(__dirname, 'index.html'));
-});
+// app.get('/', (req, res) => {
+//   res.sendFile(join(__dirname, 'index.html'));
+// });
 
 io.on('connection', (socket) => {
   console.log('Socket.io 연결 성공!');
 
   socket.on('msg', async ({ msg }) => {
-    print(msg);
+    console.log(msg);
   });
 
-  socket.on('creaeteRoom', async ({ nickname }) => {
+  socket.on('createRoom', async ({ nickname }) => {
     try {
       console.log(nickname);
       // room is created
@@ -42,7 +47,7 @@ io.on('connection', (socket) => {
       console.log(room);
       const roomId = room._id.toString();
 
-      socket.join(room);
+      socket.join(roomId);
       // notify
       io.to(roomId).emit('createRoomSuccess', room);
 
@@ -61,6 +66,23 @@ mongoose
   .catch((e) => {
     console.log(e);
   });
+
+// router setting
+app.use('/temp', tempRouter);
+
+// error handling
+app.use((req, res, next) => {
+  const err = new BaseError(status.NOT_FOUND);
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  // 템플릿 엔진 변수 설정
+  res.locals.message = err.message;
+  // 개발환경이면 에러를 출력하고 아니면 출력하지 않기
+  res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
+  res.status(err.data.status).send(response(err.data));
+});
 
 server.listen(port, '0.0.0.0', () => {
   console.log(`server running at http://localhost:${port}`);
