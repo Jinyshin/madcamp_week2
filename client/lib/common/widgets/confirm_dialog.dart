@@ -68,7 +68,7 @@ void showLeaveRoomConfirmDialog(BuildContext context) {
                 (Route<dynamic> route) => false,
               );
             },
-            child: const Text('취소'),
+            child: const Text('나가기'),
           ),
         ],
       );
