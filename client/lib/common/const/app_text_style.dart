@@ -49,13 +49,30 @@ const descriptionTextStyle = TextStyle(
   fontWeight: FontWeight.w400,
 );
 
-const elevatedBtnTextStyle = TextStyle(
+const submenuTitleTextStyle = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+  fontSize: 18,
+);
+
+const submenuContentTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 16,
+);
+
+const TextStyle elevatedBtnTextStyle = TextStyle(
   color: AppColors.darkGray,
   fontWeight: FontWeight.w600,
   fontSize: 18,
 );
 
-const authBtnTextStyle = TextStyle(
+const TextStyle whiteTextBtnTextStyle = TextStyle(
+  color: AppColors.faintGray,
+  fontWeight: FontWeight.w200,
+  fontSize: 18,
+);
+
+const mainElevatedBtnTextStyle = TextStyle(
   color: AppColors.darkGray,
   fontWeight: FontWeight.w600,
   fontSize: 18,
