@@ -4,20 +4,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node index.js"
+    "start": "nodemon ./index.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
-  "type": "module",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "http": "^0.0.1-security",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.4.5",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
-    "@babel/cli": "^7.24.7",
-    "@babel/core": "^7.24.7",
-    "@babel/node": "^7.24.7",
-    "@babel/preset-env": "^7.24.7",
     "nodemon": "^3.1.4"
   }
 }
