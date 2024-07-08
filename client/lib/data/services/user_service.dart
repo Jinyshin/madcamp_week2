@@ -30,7 +30,7 @@ class UserService {
           account.photoUrl!,
         );
 
-        UserJoinResponse response = await signIn(userJoinRequest);
+        await signIn(userJoinRequest);
         if (!context.mounted) return;
         Navigator.pushNamed(context, MainMenuScreen.routeName);
       }
