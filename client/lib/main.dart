@@ -38,6 +38,7 @@ const List<String> scopes = <String>[
 // GoogleSignIn 클래스의 인스턴스를 생성
 final GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: scopes,
+  serverClientId: '718073831002-f058g4icqnnsdamh0n2ls5k7mqpujuco.apps.googleusercontent.com',
 );
 
 // 구글 로그인을 처리하는 함수
@@ -117,4 +118,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
