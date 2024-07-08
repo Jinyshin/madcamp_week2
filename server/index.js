@@ -20,13 +20,7 @@ const io = new Server(server);
 
 // server setting - veiw, static, body-parser etc..
 app.set('port', process.env.PORT || 3000); // 서버 포트 지정
-app.use(
-  cors({
-    origin: 'http://172.24.176.1:3000',
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type'],
-  })
-);
+app.use(cors());
 app.use(express.static('public')); // 정적 파일 접근
 app.use(express.json()); // request의 본문을 json으로 해석할 수 있도록 함 (JSON 형태의 요청 body를 파싱하기 위함)
 app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형태로 본문 데이터 해석
@@ -90,5 +84,5 @@ app.use((err, req, res, next) => {
 });
 
 server.listen(port, '0.0.0.0', () => {
-  console.log(`server running at http://143.248.191.30:${port}`);
+  console.log(`server running at port:${port}`);
 });
