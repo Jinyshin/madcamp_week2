@@ -15,5 +15,5 @@ export const joinUser = async (body) => {
   if (joinUserData == -1) {
     throw new BaseError(status.EMAIL_ALREADY_EXIST);
   }
-  return signinResponseDTO(user);
+  return signinResponseDTO(joinUserData);
 };
