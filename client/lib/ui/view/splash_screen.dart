@@ -43,15 +43,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // AuthStorage.delAccessToken(); // 회원가입 api 연결을 위한 임시 토큰 삭제 코드
 
-    // if (accessToken == null || refreshToken == null) {
-    //   if (!mounted) return;
-    //   login(context);
-    // } else {
-    //   // TODO: 실제로는 일치 여부 확인까지 필요함
-    //   if (!mounted) return;
-    //   mainMenu(context);
-    // }
-    mainMenu(context);
+    if (accessToken == null || refreshToken == null) {
+      if (!mounted) return;
+      login(context);
+    } else {
+      // TODO: 실제로는 일치 여부 확인까지 필요함
+      if (!mounted) return;
+      mainMenu(context);
+    }
+    // mainMenu(context);
   }
 
   @override
