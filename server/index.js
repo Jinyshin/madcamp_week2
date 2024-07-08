@@ -1,22 +1,30 @@
 import express from 'express';
 import { createServer } from 'http';
 import { join } from 'path';
-import mongoose from 'mongoose';
 import { Server } from 'socket.io';
 // import Room from './models/room_model.js';
 import { tempRouter } from './src/routes/temp.routes.js';
+import { userRouter } from './src/routes/user.route.js';
 import { response } from './config/response.js';
 import { status } from './config/response.status.js';
 import { BaseError } from './config/error.js';
+import db from './config/db.connect.js'; // 이걸 해줘야 초기화가 됨
+import dotenv from 'dotenv';
+import cors from 'cors';
 
-const port = process.env.PORT || 3000;
+dotenv.config();
 
 const app = express();
+const port = process.env.PORT || 3000;
 const server = createServer(app);
 const io = new Server(server);
 
-const DB =
-  'mongodb+srv://jinyshin:1234@gamecluster.rxdktyn.mongodb.net/?retryWrites=true&w=majority&appName=GameCluster';
+// server setting - veiw, static, body-parser etc..
+app.set('port', process.env.PORT || 3000); // 서버 포트 지정
+app.use(cors()); // cors 방식 허용
+app.use(express.static('public')); // 정적 파일 접근
+app.use(express.json()); // request의 본문을 json으로 해석할 수 있도록 함 (JSON 형태의 요청 body를 파싱하기 위함)
+app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형태로 본문 데이터 해석
 
 // TODO: flutter랑 연결하기
 // app.get('/', (req, res) => {
@@ -58,17 +66,9 @@ io.on('connection', (socket) => {
   });
 });
 
-mongoose
-  .connect(DB)
-  .then(() => {
-    console.log('DB 연결 성공!');
-  })
-  .catch((e) => {
-    console.log(e);
-  });
-
 // router setting
 app.use('/temp', tempRouter);
+app.use('/user', userRouter);
 
 // error handling
 app.use((req, res, next) => {
