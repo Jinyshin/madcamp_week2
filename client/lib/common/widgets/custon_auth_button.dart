@@ -33,9 +33,12 @@ class CustomAuthButton extends StatelessWidget {
             height: 25,
           ),
           const SizedBox(width: 16),
-          Text(
-            text,
-            style: elevatedBtnTextStyle,
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              text,
+              style: elevatedBtnTextStyle,
+            ),
           ),
         ],
       ),

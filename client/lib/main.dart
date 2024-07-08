@@ -22,8 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'MolGam',
-      
+      title: 'MOLEGAME',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: AppColors.bgColor,
       ),
@@ -39,12 +38,10 @@ class MyApp extends StatelessWidget {
         GameWaitScreen.routeName: (context) => const GameWaitScreen(
               title: '게임 대기 화면',
               gameId: '1', // 필요한 경우 실제 게임 ID를 전달
-            ), // 추가된 부분
-        '/dudeoji-game': (context) => const DudeojiGameScreen(title: 'Whack a Mole'), // 추가된 부분
-        '/image-game': (context) => const ImageGameScreen(title: 'Image Similarity Game'), // 추가된 부분
+            ),
+        '/dudeoji-game': (context) => const DudeojiGameScreen(title: 'Whack a Mole'),
+        '/image-game': (context) => const ImageGameScreen(title: 'Image Similarity Game'),
       },
-     
-      
       // TODO: change to SplashScreen.routeName
       initialRoute: SplashScreen.routeName,
     );

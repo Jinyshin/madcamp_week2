@@ -29,7 +29,8 @@ class MainMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('몰겜'),
+        title: const Text('MOLEGAME'),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
