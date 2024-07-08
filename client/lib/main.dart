@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'MolGam',
+      title: 'MOLEGAME',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: AppColors.bgColor,
       ),
