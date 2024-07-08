@@ -61,6 +61,18 @@ export const status = {
     code: 'MEMBER4002',
     message: '닉네임은 필수입니다.',
   },
+  EMAIL_ALREADY_EXIST: {
+    status: StatusCodes.CONFLICT,
+    isSuccess: false,
+    code: 'MEMBER4003',
+    message: '이미 존재하는 이메일입니다.',
+  },
+  PARAMETER_IS_WRONG: {
+    status: StatusCodes.BAD_REQUEST,
+    isSuccess: false,
+    code: 'MEMBER4004',
+    message: '잘못된 인자입니다.',
+  },
 
   // article err
   ARTICLE_NOT_FOUND: {
