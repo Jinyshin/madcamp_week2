@@ -1,32 +1,30 @@
-import express from 'express';
-import http from 'http';
-import mongoose from 'mongoose';
-import { Server as SocketIOServer } from 'socket.io';
-
+const express = require('express');
+const { OAuth2Client } = require('google-auth-library');
 const app = express();
-const port = process.env.PORT || 3000;
-const server = http.createServer(app);
-const io = new SocketIOServer(server);
+const client = new OAuth2Client('718073831002-ltarhmstp5b2mr3g146ijjf9v42fojs1.apps.googleusercontent.com');
 
-// middleware
 app.use(express.json());
 
-const DB =
-  'mongodb+srv://jinyshin:1234@gamecluster.rxdktyn.mongodb.net/?retryWrites=true&w=majority&appName=GameCluster';
+app.post('/sign-in', async (req, res) => {
+  const { idToken, authCode } = req.body;
+  
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: idToken,
+      audience: '718073831002-ltarhmstp5b2mr3g146ijjf9v42fojs1.apps.googleusercontent.com', // 클라이언트 ID
+    });
+    const payload = ticket.getPayload();
+    const userId = payload['sub'];
+    console.log('User ID: ', userId);
 
-io.on('connection', (socket) => {
-  console.log('Socket.io 연결 성공!'); // TODO: not working. why..
+    // 사용자 인증 후 처리 로직 추가
+    res.status(200).send('Sign in successful');
+  } catch (error) {
+    console.error('Error verifying ID token:', error);
+    res.status(400).send('Invalid ID token');
+  }
 });
 
-mongoose
-  .connect(DB)
-  .then(() => {
-    console.log('DB 연결 성공!');
-  })
-  .catch((e) => {
-    console.log(e);
-  });
-
-server.listen(port, '0.0.0.0', () => {
-  console.log(`Server started and running on port ${port}`);
+app.listen(3000, () => {
+  console.log('Server started on http://localhost:3000');
 });
