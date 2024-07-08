@@ -14,13 +14,12 @@ export const addUser = async (data) => {
 
     // Create a new user
     const newUser = new User({
+      displayName: data.displayName,
       email: data.email,
-      name: data.name,
       gender: data.gender,
-      birth: data.birth,
+      id: data.id,
       addr: data.addr,
-      specAddr: data.specAddr,
-      phone: data.phone,
+      photoUrl: data.photoUrl,
     });
 
     // Save the user to the database

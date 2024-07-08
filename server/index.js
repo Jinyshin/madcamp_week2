@@ -1,6 +1,5 @@
 import express from 'express';
 import { createServer } from 'http';
-import { join } from 'path';
 import { Server } from 'socket.io';
 // import Room from './models/room_model.js';
 import { tempRouter } from './src/routes/temp.routes.js';

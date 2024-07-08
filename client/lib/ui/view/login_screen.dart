@@ -36,7 +36,7 @@ final GoogleSignIn _googleSignIn = GoogleSignIn(
 Future<void> _handleSignIn(BuildContext context) async {
   try {
     GoogleSignInAccount? account = await _googleSignIn.signIn();
-    print('Sign-in successful: ${account!.displayName}');
+    print('Sign-in successful: ${account!.toString()}');
     Navigator.pushNamed(context, MainMenuScreen.routeName);
   } catch (error) {
     print('에러: $error');

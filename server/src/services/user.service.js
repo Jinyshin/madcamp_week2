@@ -6,13 +6,10 @@ import { addUser } from '../repository/user.dao.js';
 // User 데이터 삽입
 export const joinUser = async (body) => {
   const joinUserData = await addUser({
+    displayName: body.displayName,
     email: body.email,
-    name: body.name,
-    gender: body.gender,
-    birth: body.birth,
-    addr: body.addr,
-    specAddr: body.specAddr,
-    phone: body.phone,
+    id: body.id,
+    photoUrl: body.photoUrl,
   });
 
   if (joinUserData == -1) {
