@@ -4,6 +4,7 @@ import 'package:client/ui/view/game/image_game_screen.dart';
 import 'package:flutter/material.dart';
 
 class GameWaitScreen extends StatelessWidget {
+  static const routeName = '/game-wait';
   final String title;
   final String gameId;
 

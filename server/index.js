@@ -62,6 +62,6 @@ mongoose
     console.log(e);
   });
 
-server.listen(port, '0.0.0.0', () => {
+server.listen(port, '143.248.226.20', () => {
   console.log(`server running at http://localhost:${port}`);
 });
