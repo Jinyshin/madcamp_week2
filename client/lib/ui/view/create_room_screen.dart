@@ -117,12 +117,6 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                 ),
               ),
               SizedBox(height: size.height * 0.05),
-              // TODO: textfield for test
-              CustomTextField(
-                controller: _nameController,
-                hintText: '테스트 입력',
-              ),
-              SizedBox(height: size.height * 0.045),
               CustomButton(
                 onTap: () => gameList(context),
                 text: '게임 선택',

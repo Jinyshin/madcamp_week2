@@ -1,3 +1,4 @@
+import 'package:client/common/utils/auth_storage.dart';
 import 'package:client/data/models/user_join_request.dart';
 import 'package:client/data/models/user_join_response.dart';
 import 'package:client/ui/view/main_menu_screen.dart';
@@ -21,8 +22,6 @@ class UserService {
     try {
       GoogleSignInAccount? account = await _googleSignIn.signIn();
       if (account != null) {
-        print('구글로그인 됨: ${account.toString()}');
-
         UserJoinRequest userJoinRequest = UserJoinRequest(
           account.displayName!,
           account.email,
@@ -30,7 +29,7 @@ class UserService {
           account.photoUrl!,
         );
 
-        await signIn(userJoinRequest);
+        await signUp(userJoinRequest);
         if (!context.mounted) return;
         Navigator.pushNamed(context, MainMenuScreen.routeName);
       }
@@ -39,7 +38,7 @@ class UserService {
     }
   }
 
-  Future<UserJoinResponse> signIn(UserJoinRequest userJoinRequest) async {
+  Future<UserJoinResponse> signUp(UserJoinRequest userJoinRequest) async {
     const url = 'http://143.248.191.30:3000/user/signin';
     final data = userJoinRequest.toJson();
 
@@ -47,6 +46,10 @@ class UserService {
       final response = await dio.post(url, data: data);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        final UserJoinResponse userJoinResponse =
+            UserJoinResponse.fromJson(response.data);
+        await AuthStorage.saveUserId(userJoinResponse.result.id);
+
         return UserJoinResponse.fromJson(response.data);
       } else {
         throw Exception('로그인 실패: ${response.data}');

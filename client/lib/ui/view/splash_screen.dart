@@ -18,40 +18,37 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    checkToken();
+    checkUserId();
   }
 
-  void login(BuildContext context) {
+  void signup(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
       context,
-      LoginScreen.routeName,
+      SignUpScreen.routeName,
       (route) => false,
     );
   }
 
-  void mainMenu(BuildContext context) {
+  void mainMenu(BuildContext context, String userId) {
     Navigator.pushNamedAndRemoveUntil(
       context,
       MainMenuScreen.routeName,
       (route) => false,
+      arguments: {'userId': userId},
     );
   }
 
-  void checkToken() async {
-    final accessToken = await AuthStorage.getAccessToken();
-    final refreshToken = await AuthStorage.getRefreshToken();
+  void checkUserId() async {
+    final userId = await AuthStorage.getUserId();
+    // AuthStorage.delUserId(); // 임시 userId 삭제 코드
 
-    // AuthStorage.delAccessToken(); // 회원가입 api 연결을 위한 임시 토큰 삭제 코드
-
-    if (accessToken == null || refreshToken == null) {
+    if (userId == null) {
       if (!mounted) return;
-      login(context);
+      signup(context);
     } else {
-      // TODO: 실제로는 일치 여부 확인까지 필요함
       if (!mounted) return;
-      mainMenu(context);
+      mainMenu(context, userId);
     }
-    // mainMenu(context);
   }
 
   @override

@@ -1,11 +1,11 @@
 import { BaseError } from '../../config/error.js';
 import { status } from '../../config/response.status.js';
 import { signinResponseDTO } from '../dtos/user.dto.js';
-import { addUser } from '../repository/user.dao.js';
+import { saveUser, findUserById } from '../repository/user.dao.js';
+import { findScoresByUserId } from '../repository/score.dao.js';
 
-// User 데이터 삽입
 export const joinUser = async (body) => {
-  const joinUserData = await addUser({
+  const joinUserData = await saveUser({
     displayName: body.displayName,
     email: body.email,
     id: body.id,
@@ -16,4 +16,16 @@ export const joinUser = async (body) => {
     throw new BaseError(status.EMAIL_ALREADY_EXIST);
   }
   return signinResponseDTO(joinUserData);
+};
+
+export const getProfile = async (userId) => {
+  try {
+    const user = await findUserById(userId);
+    if (!user) throw new BaseError(status.NOT_FOUND, 'User not found');
+
+    const scores = await findScoresByUserId(userId);
+    return { user, scores };
+  } catch (error) {
+    throw new BaseError(status.PARAMETER_IS_WRONG, error.message);
+  }
 };

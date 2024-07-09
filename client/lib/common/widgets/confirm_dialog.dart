@@ -28,7 +28,7 @@ void showCancleConfirmDialog(BuildContext context) {
               await leaveRoom();
               // TODO: 회원탈퇴 처리 로직 추가
               Navigator.of(context).pushNamedAndRemoveUntil(
-                LoginScreen.routeName,
+                SignUpScreen.routeName,
                 (Route<dynamic> route) => false,
               );
             },

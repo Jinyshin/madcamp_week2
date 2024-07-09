@@ -3,7 +3,7 @@ import { BaseError } from '../../config/error.js';
 import { status } from '../../config/response.status.js';
 
 // User 데이터 삽입
-export const addUser = async (data) => {
+export const saveUser = async (data) => {
   try {
     // Check if the user already exists
     const existingUser = await User.findOne({ email: data.email });
@@ -31,7 +31,7 @@ export const addUser = async (data) => {
 };
 
 // 사용자 정보 얻기
-export const getUser = async (userId) => {
+export const findUserById = async (userId) => {
   try {
     const user = await User.findById(userId);
 

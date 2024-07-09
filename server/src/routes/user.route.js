@@ -1,6 +1,10 @@
 import express from 'express';
-import { userSignin } from '../controllers/user.controller.js';
+import {
+  userJoinController,
+  getProfileController,
+} from '../controllers/user.controller.js';
 
 export const userRouter = express.Router();
 
-userRouter.post('/signin', userSignin);
+userRouter.post('/signin', userJoinController);
+userRouter.get('/profile/:userId', getProfileController);
