@@ -2,6 +2,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
 
 class ImageGameScreen extends StatefulWidget {
   final String title;
@@ -12,6 +14,9 @@ class ImageGameScreen extends StatefulWidget {
 }
 
 class _ImageGameScreenState extends State<ImageGameScreen> {
+  List<XFile>? _imageFiles;
+  String? _resultText;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,51 +24,92 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            await detectFaceSimilarity();
-          },
-          child: const Text('Detect Face Similarity'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                await _pickImages();
+              },
+              child: const Text('Select Images'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (_imageFiles != null && _imageFiles!.length > 1) {
+                  await detectFaceSimilarity(_imageFiles!);
+                } else {
+                  setState(() {
+                    _resultText = "Please select at least two images.";
+                  });
+                }
+              },
+              child: const Text('Detect Face Similarity'),
+            ),
+            _resultText != null ? Text(_resultText!) : Container(),
+          ],
         ),
       ),
     );
   }
 
-  Future<void> detectFaceSimilarity() async {
-    // Endpoint URL
-    String url = "https://api.luxand.cloud/photo/similarity";
+  Future<void> _pickImages() async {
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> images = await picker.pickMultiImage();
 
-    // Request headers
+    setState(() {
+      _imageFiles = images;
+    });
+  }
+
+  Future<void> detectFaceSimilarity(List<XFile> imageFiles) async {
+    String url = "https://api.luxand.cloud/photo/similarity";
     Map<String, String> headers = {
       "token": "6fd21c6151da49e984c378d2ac811062",
     };
 
-    // Prepare form data
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.headers.addAll(headers);
+    double highestSimilarity = 0.0;
+    String bestMatch = "";
 
-    // Load assets from 'assets' folder
-    ByteData byteData1 = await rootBundle.load('asset/sample_1.png');
-    ByteData byteData2 = await rootBundle.load('asset/sample_2.png');
+    for (int i = 0; i < imageFiles.length; i++) {
+      for (int j = i + 1; j < imageFiles.length; j++) {
+        var request = http.MultipartRequest('POST', Uri.parse(url));
+        request.headers.addAll(headers);
 
-    // Convert ByteData to List<int>
-    List<int> byteList1 = byteData1.buffer.asUint8List();
-    List<int> byteList2 = byteData2.buffer.asUint8List();
+        Uint8List byteData1 = await imageFiles[i].readAsBytes();
+        Uint8List byteData2 = await imageFiles[j].readAsBytes();
 
-    // Add files to the request
-    request.files.add(http.MultipartFile.fromBytes('face1', byteList1,
-        filename: 'sample_1.png'));
-    request.files.add(http.MultipartFile.fromBytes('face2', byteList2,
-        filename: 'sample_2.png'));
-    request.fields['threshold'] = '0.8';
+        request.files.add(http.MultipartFile.fromBytes('photo1', byteData1,
+            filename: imageFiles[i].name));
+        request.files.add(http.MultipartFile.fromBytes('photo2', byteData2,
+            filename: imageFiles[j].name));
+        request.fields['threshold'] = '0.8';
 
-    // Send the request
-    var streamedResponse = await request.send();
+        var streamedResponse = await request.send();
+        var response = await http.Response.fromStream(streamedResponse);
 
-    // Process the response
-    var response = await http.Response.fromStream(streamedResponse);
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
 
-    // Print the response body
-    print(response.body);
+        if (response.statusCode == 200) {
+          var jsonResponse = jsonDecode(response.body);
+          print('API response: $jsonResponse'); // 응답 내용을 출력
+          double similarity = jsonResponse['similarity'] ?? 0.0; // null 처리 추가
+          if (similarity > highestSimilarity) {
+            highestSimilarity = similarity;
+            bestMatch =
+                "Best match: ${imageFiles[i].name} and ${imageFiles[j].name} with similarity $similarity";
+          }
+        } else {
+          print('Error: ${response.statusCode}');
+          print('Response body: ${response.body}'); // 에러 응답 내용 출력
+        }
+      }
+    }
+
+    setState(() {
+      _resultText = highestSimilarity > 0
+          ? "$bestMatch\n오늘의 러브샷!"
+          : "No similar faces detected.";
+    });
   }
 }

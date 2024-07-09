@@ -40,7 +40,7 @@ class GameWaitScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: These values should be fetched from the server
-    const String gameRules = '두더지 게임은 화면에 나타나는 두더지를 잡는 게임입니다. 폭탄은 터치하지 마세요.';
+    const String gameRules = '샘플설명';
     const int myHighScore = 22; // Initially 2, will be fetched from the server
 
     return Scaffold(
