@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
-const playerSchema = require('./player_model');
+import mongoose from 'mongoose';
+import playerSchema from './player.model.js';
 
 const roomSchema = new mongoose.Schema({
   occupancy: {
     type: Number,
-    default: 2,
+    default: 1,
   },
   maxRounds: {
     type: Number,
@@ -28,4 +28,5 @@ const roomSchema = new mongoose.Schema({
 });
 
 const roomModel = mongoose.model('Room', roomSchema);
-module.exports = roomModel;
+
+export default roomModel;
