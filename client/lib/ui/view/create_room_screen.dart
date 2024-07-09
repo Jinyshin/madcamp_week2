@@ -2,7 +2,6 @@ import 'package:client/common/const/app_colors.dart';
 import 'package:client/common/const/app_text_style.dart';
 import 'package:client/common/widgets/confirm_dialog.dart';
 import 'package:client/common/widgets/custom_elevated_button.dart';
-import 'package:client/common/widgets/custom_textfield.dart';
 import 'package:client/ui/view/game_list_screen.dart';
 import 'package:flutter/material.dart';
 

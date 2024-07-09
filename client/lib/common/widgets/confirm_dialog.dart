@@ -65,7 +65,7 @@ void showLeaveRoomConfirmDialog(BuildContext context) {
 
               Navigator.of(context).pushNamedAndRemoveUntil(
                 MainMenuScreen.routeName,
-                (Route<dynamic> route) => false,
+                (route) => false,
               );
             },
             child: const Text('나가기'),
