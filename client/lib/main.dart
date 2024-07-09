@@ -1,5 +1,6 @@
 import 'package:client/common/const/app_colors.dart';
 import 'package:client/ui/view/create_room_screen.dart';
+import 'package:client/ui/view/game/tictactoe_game_screen.dart';
 import 'package:client/ui/view/game_list_screen.dart';
 import 'package:client/ui/view/game_wait_screen.dart';
 import 'package:client/ui/view/join_room_screen.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         RankingScreen.routeName: (context) => const RankingScreen(),
         MyProfileScreen.routeName: (context) => const MyProfileScreen(),
         SplashScreen.routeName: (context) => const SplashScreen(),
+        TicTacToeGameScreen.routeName: (context) => const TicTacToeGameScreen(),
         GameWaitScreen.routeName: (context) =>
             const GameWaitScreen(title: '게임 대기 화면', gameId: '1'),
         '/dudeoji-game': (context) =>

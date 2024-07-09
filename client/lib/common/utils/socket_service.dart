@@ -1,4 +1,6 @@
 import 'package:client/common/utils/socket_client.dart';
+import 'package:client/ui/view/game/tictactoe_game_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketService {
@@ -36,14 +38,17 @@ class SocketService {
     }
   }
 
-  // // LISTENERS
-  // void createRoomSuccessListener(BuildContext context) {
-  //   _socketClient.on('createRoomSuccess', (room) {
-  //     Provider.of<RoomDataProvider>(context, listen: false)
-  //         .updateRoomData(room);
-  //     Navigator.pushNamed(context, GameScreen.routeName);
-  //   });
-  // }
+  // LISTENERS
+  void createRoomSuccessListener(BuildContext context) {
+    _socketClient.on('createRoomSuccess', (room) {
+      print('방이 잘 생성됐다면 여기에 방 id가 출력되어야 한다.');
+      print(room);
+      // Provider.of<RoomDataProvider>(context, listen: false)
+      //     .updateRoomData(room);
+      // TODO: 빠른 구현을 위해 일단 틱택토로 라우팅해둠 -> GameListScreen 라우팅으로 수정하기
+      Navigator.pushNamed(context, TicTacToeGameScreen.routeName);
+    });
+  }
 
   // void joinRoomSuccessListener(BuildContext context) {
   //   _socketClient.on('joinRoomSuccess', (room) {

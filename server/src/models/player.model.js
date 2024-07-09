@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const playerSchema = new mongoose.Schema({
-  nickname: {
+  userId: {
     type: String,
     trim: true,
   },

@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// import Room from './models/room_model.js';
+import Room from './src/models/room.model.js';
 import { tempRouter } from './src/routes/temp.route.js';
 import { userRouter } from './src/routes/user.route.js';
 import { gameRouter } from './src/routes/game.route.js';
@@ -67,23 +67,29 @@ io.on('connection', (socket) => {
 
   socket.on('createRoom', async ({ userId }) => {
     try {
-      // // room is created
-      // let room = new Room();
-      // let player = {
-      //   socketID: socket.id,
-      //   nickname,
-      //   playerType: 'X',
-      // };
-      // room.players.push(player);
-      // room.turn = player; // 방장이 먼저
-      // // mongo db에 저장
-      // room = await room.save();
+      // 새로운 게임 room을 생성하고 플레이어를 저장함
+      let room = new Room();
+      let player = {
+        socketID: socket.id,
+        userId,
+        playerType: 'X',
+      };
+      room.players.push(player);
+      room.turn = player; // 방장('X')이 먼저 시작함
+      room.occupancy = 2;
+
+      // MongoDB에 저장
+      room = await room.save(); // 생성된 room을 리턴해줌. 우리가 보내지 않은 default 프로퍼티 값들도 활용하기 위해 재할당함.
       // console.log(room);
-      // const roomId = room._id.toString();
-      // socket.join(roomId);
-      // // notify
-      // io.to(roomId).emit('createRoomSuccess', room);
-      // // go to the next page
+
+      const roomId = room._id.toString();
+      socket.join(roomId); // 특정 room에 join하기 위함
+      // 클라이언트에게 room이 생성되었음을 알림
+      // 클라이언트는 다음 화면으로 이동함
+      // socket.emit -> 나의 클라이언트에게만 noti를 줌
+      // io.emit -> 이 앱에 참여중인 모든 player들에게 모두 noti를 줌
+      // io.to(roomId) -> 이 방에 참여중인 player들에게 모두 noti를 줌
+      io.to(roomId).emit('createRoomSuccess', room);
     } catch (e) {
       console.log(e);
     }

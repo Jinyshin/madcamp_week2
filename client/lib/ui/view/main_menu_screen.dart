@@ -24,6 +24,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   void initState() {
     super.initState();
     _initializeUserId();
+    _socketService.createRoomSuccessListener(context);
   }
 
   Future<void> _initializeUserId() async {
@@ -34,8 +35,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   }
 
   void createRoom(BuildContext context) {
-    // TODO: 방을 새로 생성하고, response로 받은 방 번호를 보내야 할듯?->일단은 기획을 영상대로 하고 추후 변경하든가말든가
-
     _socketService.createRoom(userId);
     Navigator.pushNamed(context, CreateRoomScreen.routeName);
   }
