@@ -2,8 +2,10 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 // import Room from './models/room_model.js';
-import { tempRouter } from './src/routes/temp.routes.js';
+import { tempRouter } from './src/routes/temp.route.js';
 import { userRouter } from './src/routes/user.route.js';
+import { gameRouter } from './src/routes/game.route.js';
+import { scoreRouter } from './src/routes/score.route.js';
 import { response } from './config/response.js';
 import { status } from './config/response.status.js';
 import { BaseError } from './config/error.js';
@@ -25,7 +27,27 @@ app.use(express.static('public')); // 정적 파일 접근
 app.use(express.json()); // request의 본문을 json으로 해석할 수 있도록 함 (JSON 형태의 요청 body를 파싱하기 위함)
 app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형태로 본문 데이터 해석
 
-// TODO: flutter랑 연결하기
+// router setting
+app.use('/temp', tempRouter);
+app.use('/user', userRouter);
+app.use('/games', gameRouter);
+app.use('/score', scoreRouter);
+
+// error handling
+app.use((req, res, next) => {
+  const err = new BaseError(status.NOT_FOUND);
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  // 템플릿 엔진 변수 설정
+  res.locals.message = err.message;
+  // 개발환경이면 에러를 출력하고 아니면 출력하지 않기
+  res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
+  res.status(err.data.status).send(response(err.data));
+});
+
+// TODO: connect socket, flutter
 // app.get('/', (req, res) => {
 //   res.sendFile(join(__dirname, 'index.html'));
 // });
@@ -63,24 +85,6 @@ io.on('connection', (socket) => {
       console.log(e);
     }
   });
-});
-
-// router setting
-app.use('/temp', tempRouter);
-app.use('/user', userRouter);
-
-// error handling
-app.use((req, res, next) => {
-  const err = new BaseError(status.NOT_FOUND);
-  next(err);
-});
-
-app.use((err, req, res, next) => {
-  // 템플릿 엔진 변수 설정
-  res.locals.message = err.message;
-  // 개발환경이면 에러를 출력하고 아니면 출력하지 않기
-  res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
-  res.status(err.data.status).send(response(err.data));
 });
 
 server.listen(port, '0.0.0.0', () => {
