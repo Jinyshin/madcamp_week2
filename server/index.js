@@ -1,6 +1,8 @@
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import path from 'path';
+import { fileURLToPath } from 'url';
 // import Room from './models/room_model.js';
 import { tempRouter } from './src/routes/temp.route.js';
 import { userRouter } from './src/routes/user.route.js';
@@ -14,11 +16,18 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 
 dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
 const server = createServer(app);
 const io = new Server(server);
+
+// 정적 파일 제공
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'src', 'public', 'index.html'));
+});
 
 // server setting - veiw, static, body-parser etc..
 app.set('port', process.env.PORT || 3000); // 서버 포트 지정
@@ -42,49 +51,43 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   // 템플릿 엔진 변수 설정
   res.locals.message = err.message;
-  // 개발환경이면 에러를 출력하고 아니면 출력하지 않기
   res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
   res.status(err.data.status).send(response(err.data));
 });
 
-// TODO: connect socket, flutter
-// app.get('/', (req, res) => {
-//   res.sendFile(join(__dirname, 'index.html'));
-// });
-
 io.on('connection', (socket) => {
   console.log('Socket.io 연결 성공!');
 
-  socket.on('msg', async ({ msg }) => {
-    console.log(msg);
+  socket.on('msg', (data) => {
+    console.log('플러터에서 보낸 메시지:', data);
   });
 
-  socket.on('createRoom', async ({ nickname }) => {
-    try {
-      console.log(nickname);
-      // room is created
-      let room = new Room();
-      let player = {
-        socketID: socket.id,
-        nickname,
-        playerType: 'X',
-      };
-      room.players.push(player);
-      room.turn = player; // 방장이 먼저
-      // mongo db에 저장
-      room = await room.save();
-      console.log(room);
-      const roomId = room._id.toString();
+  // socket.on('createRoom', async ({ nickname }) => {
+  //   try {
+  //     console.log(nickname);
+  //     // room is created
+  //     let room = new Room();
+  //     let player = {
+  //       socketID: socket.id,
+  //       nickname,
+  //       playerType: 'X',
+  //     };
+  //     room.players.push(player);
+  //     room.turn = player; // 방장이 먼저
+  //     // mongo db에 저장
+  //     room = await room.save();
+  //     console.log(room);
+  //     const roomId = room._id.toString();
 
-      socket.join(roomId);
-      // notify
-      io.to(roomId).emit('createRoomSuccess', room);
+  //     socket.join(roomId);
+  //     // notify
+  //     io.to(roomId).emit('createRoomSuccess', room);
 
-      // go to the next page
-    } catch (e) {
-      console.log(e);
-    }
-  });
+  //     // go to the next page
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // });
 });
 
 server.listen(port, '0.0.0.0', () => {

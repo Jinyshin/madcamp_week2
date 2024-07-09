@@ -1,15 +1,31 @@
+import 'dart:io';
+
 import 'package:client/common/widgets/custom_elevated_button.dart';
 import 'package:client/ui/view/create_room_screen.dart';
 import 'package:client/ui/view/join_room_screen.dart';
 import 'package:client/ui/view/ranking_room_screen.dart';
 import 'package:client/ui/view/my_profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class MainMenuScreen extends StatelessWidget {
   static String routeName = '/main-menu';
   const MainMenuScreen({super.key});
 
   void createRoom(BuildContext context) {
+    // TODO: socket.io 연결하기
+
+    Socket socket = io(
+        'http://143.248.191.30:3000',
+        OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+            .build());
+    socket.connect();
+    socket.onConnect((_) {
+      socket.emit('msg', '이게 나와야 함');
+    });
+    socket.onDisconnect((_) => print('Disconnected'));
+    socket.on('event', (data) => print(data));
+
     Navigator.pushNamed(context, CreateRoomScreen.routeName);
   }
 
