@@ -28,11 +28,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.bgColor,
       ),
       routes: {
-        MainMenuScreen.routeName: (context) => const MainMenuScreen(),
+        MainMenuScreen.routeName: (context) => const MainMenuScreen(userId: ''),
         JoinRoomScreen.routeName: (context) => const JoinRoomScreen(),
         CreateRoomScreen.routeName: (context) => const CreateRoomScreen(),
         GameListScreen.routeName: (context) => const GameListScreen(),
-        LoginScreen.routeName: (context) => const LoginScreen(),
+        SignUpScreen.routeName: (context) => const SignUpScreen(),
         RankingScreen.routeName: (context) => const RankingScreen(),
         MyProfileScreen.routeName: (context) => const MyProfileScreen(),
         SplashScreen.routeName: (context) => const SplashScreen(),
@@ -43,8 +43,7 @@ class MyApp extends StatelessWidget {
         '/image-game': (context) =>
             const ImageGameScreen(title: 'Image Similarity Game'),
       },
-      // TODO: change to SplashScreen.routeName
-      initialRoute: MainMenuScreen.routeName,
+      initialRoute: SplashScreen.routeName,
     );
   }
 }

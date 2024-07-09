@@ -1,31 +1,28 @@
-import 'dart:io';
-
+import 'package:client/common/utils/socket_service.dart';
 import 'package:client/common/widgets/custom_elevated_button.dart';
 import 'package:client/ui/view/create_room_screen.dart';
 import 'package:client/ui/view/join_room_screen.dart';
 import 'package:client/ui/view/ranking_room_screen.dart';
 import 'package:client/ui/view/my_profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
-class MainMenuScreen extends StatelessWidget {
+class MainMenuScreen extends StatefulWidget {
   static String routeName = '/main-menu';
-  const MainMenuScreen({super.key});
+  final String userId;
+
+  const MainMenuScreen({super.key, required this.userId});
+
+  @override
+  State<MainMenuScreen> createState() => _MainMenuScreenState();
+}
+
+class _MainMenuScreenState extends State<MainMenuScreen> {
+  final SocketService _socketService = SocketService();
 
   void createRoom(BuildContext context) {
-    // TODO: socket.io 연결하기
+    // TODO: 방을 새로 생성하고, response로 받은 방 번호를 보내야 할듯?->일단은 기획을 영상대로 하고 추후 변경하든가말든가
 
-    Socket socket = io(
-        'http://143.248.191.30:3000',
-        OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
-            .build());
-    socket.connect();
-    socket.onConnect((_) {
-      socket.emit('msg', '이게 나와야 함');
-    });
-    socket.onDisconnect((_) => print('Disconnected'));
-    socket.on('event', (data) => print(data));
-
+    _socketService.createRoom(widget.userId);
     Navigator.pushNamed(context, CreateRoomScreen.routeName);
   }
 
