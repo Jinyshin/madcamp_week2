@@ -58,36 +58,36 @@ app.use((err, req, res, next) => {
 io.on('connection', (socket) => {
   console.log('Socket.io 연결 성공!');
 
-  socket.on('msg', (data) => {
-    console.log('플러터에서 보낸 메시지:', data);
+  // socket.on('userId', (data) => {
+  //   console.log('플러터에서 보낸 userId:', data);
+  // });
+  socket.on('userId', async ({ data }) => {
+    console.log('플러터에서 보낸 userId:', data);
   });
 
-  // socket.on('createRoom', async ({ nickname }) => {
-  //   try {
-  //     console.log(nickname);
-  //     // room is created
-  //     let room = new Room();
-  //     let player = {
-  //       socketID: socket.id,
-  //       nickname,
-  //       playerType: 'X',
-  //     };
-  //     room.players.push(player);
-  //     room.turn = player; // 방장이 먼저
-  //     // mongo db에 저장
-  //     room = await room.save();
-  //     console.log(room);
-  //     const roomId = room._id.toString();
-
-  //     socket.join(roomId);
-  //     // notify
-  //     io.to(roomId).emit('createRoomSuccess', room);
-
-  //     // go to the next page
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // });
+  socket.on('createRoom', async ({ userId }) => {
+    try {
+      // // room is created
+      // let room = new Room();
+      // let player = {
+      //   socketID: socket.id,
+      //   nickname,
+      //   playerType: 'X',
+      // };
+      // room.players.push(player);
+      // room.turn = player; // 방장이 먼저
+      // // mongo db에 저장
+      // room = await room.save();
+      // console.log(room);
+      // const roomId = room._id.toString();
+      // socket.join(roomId);
+      // // notify
+      // io.to(roomId).emit('createRoomSuccess', room);
+      // // go to the next page
+    } catch (e) {
+      console.log(e);
+    }
+  });
 });
 
 server.listen(port, '0.0.0.0', () => {

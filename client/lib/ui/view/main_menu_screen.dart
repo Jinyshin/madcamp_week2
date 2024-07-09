@@ -8,9 +8,8 @@ import 'package:flutter/material.dart';
 
 class MainMenuScreen extends StatefulWidget {
   static String routeName = '/main-menu';
-  final String userId;
 
-  const MainMenuScreen({super.key, required this.userId});
+  const MainMenuScreen({super.key});
 
   @override
   State<MainMenuScreen> createState() => _MainMenuScreenState();
@@ -18,11 +17,12 @@ class MainMenuScreen extends StatefulWidget {
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
   final SocketService _socketService = SocketService();
+  late String userId;
 
   void createRoom(BuildContext context) {
     // TODO: 방을 새로 생성하고, response로 받은 방 번호를 보내야 할듯?->일단은 기획을 영상대로 하고 추후 변경하든가말든가
 
-    _socketService.createRoom(widget.userId);
+    _socketService.createRoom(userId);
     Navigator.pushNamed(context, CreateRoomScreen.routeName);
   }
 
@@ -36,6 +36,13 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   void myProfile(BuildContext context) {
     Navigator.pushNamed(context, MyProfileScreen.routeName);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    userId = arguments['userId'];
   }
 
   @override

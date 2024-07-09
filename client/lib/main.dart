@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.bgColor,
       ),
       routes: {
-        MainMenuScreen.routeName: (context) => const MainMenuScreen(userId: ''),
+        MainMenuScreen.routeName: (context) => const MainMenuScreen(),
         JoinRoomScreen.routeName: (context) => const JoinRoomScreen(),
         CreateRoomScreen.routeName: (context) => const CreateRoomScreen(),
         GameListScreen.routeName: (context) => const GameListScreen(),
