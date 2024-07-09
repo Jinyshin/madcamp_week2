@@ -2,10 +2,10 @@ import 'package:client/common/widgets/custon_auth_button.dart';
 import 'package:client/data/services/user_service.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-  static const routeName = '/login';
+class SignUpScreen extends StatelessWidget {
+  static const routeName = '/signup';
 
-  const LoginScreen({super.key});
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
