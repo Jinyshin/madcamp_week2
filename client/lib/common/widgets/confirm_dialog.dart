@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 void showCancleConfirmDialog(BuildContext context) {
   showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
@@ -42,6 +43,7 @@ void showCancleConfirmDialog(BuildContext context) {
 
 void showLeaveRoomConfirmDialog(BuildContext context) {
   showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(

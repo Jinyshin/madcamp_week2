@@ -6,6 +6,7 @@ import 'package:client/ui/view/game/tictactoe_game_screen.dart';
 import 'package:client/ui/view/game_list_screen.dart';
 import 'package:client/ui/view/game_wait_screen.dart';
 import 'package:client/ui/view/join_room_screen.dart';
+import 'package:client/ui/view/joined_room_screen.dart';
 import 'package:client/ui/view/login_screen.dart';
 import 'package:client/ui/view/main_menu_screen.dart';
 import 'package:client/ui/view/my_profile_screen.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         routes: {
           MainMenuScreen.routeName: (context) => const MainMenuScreen(),
           JoinRoomScreen.routeName: (context) => const JoinRoomScreen(),
+          JoinedRoomScreen.routeName: (context) => const JoinedRoomScreen(),
           CreateRoomScreen.routeName: (context) => const CreateRoomScreen(),
           GameListScreen.routeName: (context) => const GameListScreen(),
           SignUpScreen.routeName: (context) => const SignUpScreen(),

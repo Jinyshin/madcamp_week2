@@ -76,15 +76,11 @@ class _DudeojiGameScreenState extends State<DudeojiGameScreen> {
     final userId = prefs.getString('userId') ?? '';
     final gameId = prefs.getString('gameId') ?? '';
 
-    print("---");
-    print(userId);
-    print(gameId);
-    print("---");
-
     // 서버에 점수 저장 요청
     await postScore(userId, gameId, score);
 
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -239,11 +235,12 @@ class _DudeojiGameScreenState extends State<DudeojiGameScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      Center(
-                        child: Text(
-                          '00:${_timeRemaining.toString().padLeft(2, '0')}',
-                          style: const TextStyle(color: Colors.black, fontSize: 20),
-                        ),
+                    ),
+                    Center(
+                      child: Text(
+                        '00:${_timeRemaining.toString().padLeft(2, '0')}',
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 20),
                       ),
                     ],
                   );
@@ -257,7 +254,7 @@ class _DudeojiGameScreenState extends State<DudeojiGameScreen> {
     );
   }
 }
-
+/*
 // 앱의 진입점
 void main() {
   runApp(const MyApp());
@@ -279,3 +276,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+*/
