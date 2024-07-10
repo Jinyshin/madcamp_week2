@@ -22,12 +22,16 @@ class UserService {
     try {
       GoogleSignInAccount? account = await _googleSignIn.signIn();
       if (account != null) {
+        print(account);
+
         UserJoinRequest userJoinRequest = UserJoinRequest(
           account.displayName!,
           account.email,
           account.id,
-          account.photoUrl!,
+          account.photoUrl,
         );
+
+        print(userJoinRequest.toString());
 
         await signUp(userJoinRequest);
         if (!context.mounted) return;
@@ -44,6 +48,8 @@ class UserService {
 
     try {
       final response = await dio.post(url, data: data);
+
+      print(response.data);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final UserJoinResponse userJoinResponse =

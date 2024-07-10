@@ -11,7 +11,7 @@ UserJoinRequest _$UserJoinRequestFromJson(Map<String, dynamic> json) =>
       json['displayName'] as String,
       json['email'] as String,
       json['id'] as String,
-      json['photoUrl'] as String,
+      json['photoUrl'] as String?,
     );
 
 Map<String, dynamic> _$UserJoinRequestToJson(UserJoinRequest instance) =>
