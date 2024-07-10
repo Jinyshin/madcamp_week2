@@ -4,7 +4,7 @@ import 'package:client/common/utils/socket_service.dart';
 import 'package:client/common/widgets/confirm_dialog.dart';
 import 'package:client/common/widgets/custom_elevated_button.dart';
 import 'package:client/data/provider/room_data_provider.dart';
-import 'package:client/ui/view/game_list_screen.dart';
+import 'package:client/ui/view/game/tictactoe_game_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,13 +21,16 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
   final SocketService _socketService = SocketService();
 
   void gameList(BuildContext context) {
-    Navigator.pushNamed(context, GameListScreen.routeName);
+    // Navigator.pushNamed(context, GameListScreen.routeName);
+    // 임시
+    Navigator.pushNamed(context, TicTacToeGameScreen.routeName);
   }
 
   @override
   void initState() {
     super.initState();
     _socketService.updateRoomListener(context);
+    _socketService.updatePlayersStateListener(context);
   }
 
   @override
@@ -117,8 +120,6 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                               child: ListView.builder(
                                 itemCount: players.length,
                                 itemBuilder: (context, index) {
-                                  print("게임 플레이어 몇명???");
-                                  print(players);
                                   return Text(
                                     players[index],
                                     style: const TextStyle(

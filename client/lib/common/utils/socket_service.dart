@@ -1,7 +1,9 @@
+import 'package:client/common/utils/dialog.dart';
+import 'package:client/common/utils/game_service.dart';
 import 'package:client/common/utils/snackbar.dart';
 import 'package:client/common/utils/socket_client.dart';
 import 'package:client/data/provider/room_data_provider.dart';
-import 'package:client/ui/view/game/tictactoe_game_screen.dart';
+import 'package:client/ui/view/joined_room_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -46,8 +48,6 @@ class SocketService {
     _socketClient.on('createRoomSuccess', (room) {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(room);
-      // TODO: 빠른 구현을 위해 일단 틱택토로 라우팅해둠 -> GameListScreen 라우팅으로 수정하기
-
       // Navigator.pushNamed(context, TicTacToeGameScreen.routeName);
     });
   }
@@ -56,8 +56,7 @@ class SocketService {
     _socketClient.on('joinRoomSuccess', (room) {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(room);
-
-      Navigator.pushNamed(context, TicTacToeGameScreen.routeName);
+      Navigator.pushNamed(context, JoinedRoomScreen.routeName);
     });
 
     _socketClient.on('updatePlayers', (players) {
@@ -93,36 +92,37 @@ class SocketService {
     });
   }
 
-  // void tappedListener(BuildContext context) {
-  //   _socketClient.on('tapped', (data) {
-  //     RoomDataProvider roomDataProvider =
-  //         Provider.of<RoomDataProvider>(context, listen: false);
-  //     roomDataProvider.updateDisplayElements(
-  //       data['index'],
-  //       data['choice'],
-  //     );
-  //     roomDataProvider.updateRoomData(data['room']);
-  //     // check winnner
-  //     GameMethods().checkWinner(context, _socketClient);
-  //   });
-  // }
+  void tappedListener(BuildContext context) {
+    _socketClient.on('tapped', (data) {
+      RoomDataProvider roomDataProvider =
+          Provider.of<RoomDataProvider>(context, listen: false);
+      roomDataProvider.updateDisplayElements(
+        data['index'],
+        data['choice'],
+      );
+      roomDataProvider.updateRoomData(data['room']);
+      // check winnner
+      GameMethods().checkWinner(context, _socketClient);
+    });
+  }
 
-  // void pointIncreaseListener(BuildContext context) {
-  //   _socketClient.on('pointIncrease', (playerData) {
-  //     var roomDataProvider =
-  //         Provider.of<RoomDataProvider>(context, listen: false);
-  //     if (playerData['socketID'] == roomDataProvider.player1.socketID) {
-  //       roomDataProvider.updatePlayer1(playerData);
-  //     } else {
-  //       roomDataProvider.updatePlayer2(playerData);
-  //     }
-  //   });
-  // }
+  void pointIncreaseListener(BuildContext context) {
+    _socketClient.on('pointIncrease', (playerData) {
+      var roomDataProvider =
+          Provider.of<RoomDataProvider>(context, listen: false);
+      if (playerData['socketID'] == roomDataProvider.player1.socketID) {
+        roomDataProvider.updatePlayer1(playerData);
+      } else {
+        roomDataProvider.updatePlayer2(playerData);
+      }
+    });
+  }
 
-  // void endGameListener(BuildContext context) {
-  //   _socketClient.on('endGame', (playerData) {
-  //     showGameDialog(context, '${playerData['nickname']} won the game!');
-  //     Navigator.popUntil(context, (route) => false);
-  //   });
-  // }
+  void endGameListener(BuildContext context) {
+    _socketClient.on('endGame', (playerData) {
+      showGameDialog(context, '${playerData['userId']} won the game!');
+      // 임시
+      Navigator.popUntil(context, (route) => false);
+    });
+  }
 }

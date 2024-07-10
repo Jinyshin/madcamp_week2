@@ -40,11 +40,11 @@ class RoomDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void updateDisplayElements(int index, String choice) {
-  //   _displayElement[index] = choice;
-  //   _filledBoxes += 1;
-  //   notifyListeners();
-  // }
+  void updateDisplayElements(int index, String choice) {
+    _displayElement[index] = choice;
+    _filledBoxes += 1;
+    notifyListeners();
+  }
 
   void setFilledBoxesTo0() {
     _filledBoxes = 0;

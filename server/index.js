@@ -96,10 +96,10 @@ io.on('connection', (socket) => {
 
   socket.on('joinRoom', async ({ userId, roomId }) => {
     try {
-      if (!roomId.match(/^[0-9a-fA-F]{24}$/)) {
-        socket.emit('errorOccurred', '유효한 방 번호를 입력해주세요.');
-        return;
-      }
+      // if (!roomId.match(/^[0-9a-fA-F]{24}$/)) {
+      //   socket.emit('errorOccurred', '유효한 방 번호를 입력해주세요.');
+      //   return;
+      // }
       let room = await Room.findById(roomId);
       console.log('조인가능한 방인지 id 통해 조회해옴');
       console.log(room);
@@ -122,6 +122,48 @@ io.on('connection', (socket) => {
           'errorOccurred',
           '이 방은 이미 게임이 시작되어 참여가 불가합니다.'
         );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
+  socket.on('tap', async ({ index, roomId }) => {
+    try {
+      let room = await Room.findById(roomId);
+
+      let choice = room.turn.playerType; // x or o
+      if (room.turnIndex == 0) {
+        room.turn = room.players[1];
+        room.turnIndex = 1;
+      } else {
+        room.turn = room.players[0];
+        room.turnIndex = 0;
+      }
+      room = await room.save();
+      io.to(roomId).emit('tapped', {
+        index,
+        choice,
+        room,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
+  socket.on('winner', async ({ winnerSocketId, roomId }) => {
+    try {
+      let room = await Room.findById(roomId);
+      let player = room.players.find(
+        (playerr) => playerr.socketID == winnerSocketId
+      );
+      player.points += 1;
+      room = await room.save();
+
+      if (player.points >= room.maxRounds) {
+        io.to(roomId).emit('endGame', player);
+      } else {
+        io.to(roomId).emit('pointIncrease', player);
       }
     } catch (e) {
       console.log(e);

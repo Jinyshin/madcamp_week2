@@ -1,4 +1,3 @@
-
 // import 'dart:typed_data';
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
@@ -100,21 +99,24 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
               onPressed: () async {
                 await selectNumberOfPeople();
               },
-              child: Text('Enter Number of People'),
+              child: const Text('Enter Number of People'),
             ),
             ElevatedButton(
               onPressed: () async {
                 await selectImagePairs();
               },
-              child: Text('Enter Image Pairs'),
+              child: const Text('Enter Image Pairs'),
             ),
             ElevatedButton(
               onPressed: () async {
                 await detectFaceSimilarity();
               },
-              child: Text('Detect Face Similarity'),
+              child: const Text('Detect Face Similarity'),
             ),
-            (bestPair[0] > 0 && bestPair[1] > 0 && bestPair[0] <= imagePaths.length && bestPair[1] <= imagePaths.length)
+            (bestPair[0] > 0 &&
+                    bestPair[1] > 0 &&
+                    bestPair[0] <= imagePaths.length &&
+                    bestPair[1] <= imagePaths.length)
                 ? Column(
                     children: [
                       Image.asset(imagePaths[bestPair[0] - 1]),
@@ -131,22 +133,25 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
 
   Future<void> selectNumberOfPeople() async {
     int? numPeople = await showDialog<int>(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return NumberInputDialog();
+        return const NumberInputDialog();
       },
     );
 
     if (numPeople != null) {
       setState(() {
         numberOfPeople = numPeople;
-        imagePaths = List.generate(numPeople, (index) => 'asset/sample_${index + 1}.jpg');
+        imagePaths = List.generate(
+            numPeople, (index) => 'asset/sample_${index + 1}.jpg');
       });
     }
   }
 
   Future<void> selectImagePairs() async {
     List<List<int>>? pairs = await showDialog<List<List<int>>>(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return ImagePairsInputDialog(numberOfPeople: numberOfPeople);
@@ -170,7 +175,10 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
     List<int> tempBestPair = [0, 1];
 
     for (List<int> pair in selectedPairs) {
-      if (pair[0] <= 0 || pair[0] > imagePaths.length || pair[1] <= 0 || pair[1] > imagePaths.length) {
+      if (pair[0] <= 0 ||
+          pair[0] > imagePaths.length ||
+          pair[1] <= 0 ||
+          pair[1] > imagePaths.length) {
         print('Invalid pair: ${pair[0]}, ${pair[1]}');
         continue;
       }
@@ -184,8 +192,10 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
       List<int> byteList1 = byteData1.buffer.asUint8List();
       List<int> byteList2 = byteData2.buffer.asUint8List();
 
-      request.files.add(http.MultipartFile.fromBytes('face1', byteList1, filename: 'sample_${pair[0]}.jpg'));
-      request.files.add(http.MultipartFile.fromBytes('face2', byteList2, filename: 'sample_${pair[1]}.jpg'));
+      request.files.add(http.MultipartFile.fromBytes('face1', byteList1,
+          filename: 'sample_${pair[0]}.jpg'));
+      request.files.add(http.MultipartFile.fromBytes('face2', byteList2,
+          filename: 'sample_${pair[1]}.jpg'));
       request.fields['threshold'] = '0.8';
 
       var streamedResponse = await request.send();
@@ -208,10 +218,11 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
     });
 
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Most Similar Faces'),
+          title: const Text('Most Similar Faces'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -225,7 +236,7 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -235,28 +246,30 @@ class _ImageGameScreenState extends State<ImageGameScreen> {
 }
 
 class NumberInputDialog extends StatefulWidget {
+  const NumberInputDialog({super.key});
+
   @override
   _NumberInputDialogState createState() => _NumberInputDialogState();
 }
 
 class _NumberInputDialogState extends State<NumberInputDialog> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Enter Number of People'),
+      title: const Text('Enter Number of People'),
       content: TextField(
         controller: _controller,
         keyboardType: TextInputType.number,
-        decoration: InputDecoration(hintText: "Number of People"),
+        decoration: const InputDecoration(hintText: "Number of People"),
       ),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop(int.tryParse(_controller.text));
           },
-          child: Text('OK'),
+          child: const Text('OK'),
         ),
       ],
     );
@@ -265,7 +278,7 @@ class _NumberInputDialogState extends State<NumberInputDialog> {
 
 class ImagePairsInputDialog extends StatefulWidget {
   final int numberOfPeople;
-  const ImagePairsInputDialog({required this.numberOfPeople});
+  const ImagePairsInputDialog({super.key, required this.numberOfPeople});
 
   @override
   _ImagePairsInputDialogState createState() => _ImagePairsInputDialogState();
@@ -277,13 +290,14 @@ class _ImagePairsInputDialogState extends State<ImagePairsInputDialog> {
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(widget.numberOfPeople, (index) => TextEditingController());
+    _controllers = List.generate(
+        widget.numberOfPeople, (index) => TextEditingController());
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Enter Image Pairs'),
+      title: const Text('Enter Image Pairs'),
       content: SingleChildScrollView(
         child: Column(
           children: _controllers.map((controller) {
@@ -291,7 +305,8 @@ class _ImagePairsInputDialogState extends State<ImagePairsInputDialog> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: TextField(
                 controller: controller,
-                decoration: InputDecoration(hintText: "Enter pair (e.g. 1 2)"),
+                decoration:
+                    const InputDecoration(hintText: "Enter pair (e.g. 1 2)"),
               ),
             );
           }).toList(),
@@ -315,7 +330,7 @@ class _ImagePairsInputDialogState extends State<ImagePairsInputDialog> {
             }
             Navigator.of(context).pop(pairs);
           },
-          child: Text('OK'),
+          child: const Text('OK'),
         ),
       ],
     );

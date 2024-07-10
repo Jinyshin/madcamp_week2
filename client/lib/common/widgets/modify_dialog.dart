@@ -7,6 +7,7 @@ Future<String?> showModifyNicknameDialog(
   nicknameController.text = nickname;
 
   return await showDialog<String>(
+    barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(

@@ -76,19 +76,15 @@ class _DudeojiGameScreenState extends State<DudeojiGameScreen> {
     final userId = prefs.getString('userId') ?? '';
     final gameId = prefs.getString('gameId') ?? '';
 
-    print("---");
-    print(userId);
-    print(gameId);
-    print("---");
-
     // 서버에 점수 저장 요청
     await postScore(userId, gameId, score);
 
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('게임 종료'),
+          title: const Text('게임 종료'),
           content: Text('점수: $score'),
           actions: [
             TextButton(
@@ -105,7 +101,7 @@ class _DudeojiGameScreenState extends State<DudeojiGameScreen> {
                   ));
                 });
               },
-              child: Text('확인'),
+              child: const Text('확인'),
             ),
           ],
         );
@@ -243,7 +239,8 @@ class _DudeojiGameScreenState extends State<DudeojiGameScreen> {
                     Center(
                       child: Text(
                         '00:${_timeRemaining.toString().padLeft(2, '0')}',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 20),
                       ),
                     ),
                   ],
@@ -272,7 +269,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Whack a Mole Game',
       debugShowCheckedModeBanner: false,
-      home: DudeojiGameScreen(title: 'Whack a Mole'),
+      home: const DudeojiGameScreen(title: 'Whack a Mole'),
       routes: {
         GameListScreen.routeName: (context) => const GameListScreen(), // 경로 설정
       },
