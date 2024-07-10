@@ -80,7 +80,6 @@ io.on('connection', (socket) => {
 
       // MongoDB에 저장
       room = await room.save(); // 생성된 room을 리턴해줌. 우리가 보내지 않은 default 프로퍼티 값들도 활용하기 위해 재할당함.
-      // console.log(room);
 
       const roomId = room._id.toString();
       socket.join(roomId); // 특정 room에 join하기 위함
@@ -102,6 +101,8 @@ io.on('connection', (socket) => {
         return;
       }
       let room = await Room.findById(roomId);
+      console.log('조인가능한 방인지 id 통해 조회해옴');
+      console.log(room);
 
       if (room.isJoin) {
         let player = {

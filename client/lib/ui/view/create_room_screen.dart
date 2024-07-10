@@ -1,5 +1,6 @@
 import 'package:client/common/const/app_colors.dart';
 import 'package:client/common/const/app_text_style.dart';
+import 'package:client/common/utils/socket_service.dart';
 import 'package:client/common/widgets/confirm_dialog.dart';
 import 'package:client/common/widgets/custom_elevated_button.dart';
 import 'package:client/data/provider/room_data_provider.dart';
@@ -17,8 +18,7 @@ class CreateRoomScreen extends StatefulWidget {
 
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
   final TextEditingController _nameController = TextEditingController();
-  List<String> players = [];
-  String roomNumber = '';
+  final SocketService _socketService = SocketService();
 
   void gameList(BuildContext context) {
     Navigator.pushNamed(context, GameListScreen.routeName);
@@ -27,23 +27,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
   @override
   void initState() {
     super.initState();
-    // roomDataProvider를 초기화 후 players 리스트를 업데이트
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateRoomNumberandPlayers();
-    });
-  }
-
-  void _updateRoomNumberandPlayers() {
-    RoomDataProvider roomDataProvider =
-        Provider.of<RoomDataProvider>(context, listen: false);
-    setState(() {
-      roomNumber = roomDataProvider.roomData['_id'] ?? '';
-      // roomDataProvider.roomData로부터 players 리스트를 업데이트
-      players = (roomDataProvider.roomData['players'] as List<dynamic>?)
-              ?.map((player) => player['userId'] as String)
-              .toList() ??
-          [];
-    });
+    _socketService.updateRoomListener(context);
   }
 
   @override
@@ -54,19 +38,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context);
     final size = MediaQuery.of(context).size;
-
-    // TODO: 사용자 id 추가되면 업데이트하기
-    print("방 만들기 화면에서 방데이터기다리는중");
-    print(roomDataProvider.roomData.toString());
-
-    roomNumber = roomDataProvider.roomData['_id'] ?? '';
-    // roomDataProvider.roomData의 변경이 있을 때 players 리스트를 업데이트
-    players = (roomDataProvider.roomData['players'] as List<dynamic>?)
-            ?.map((player) => player['userId'] as String)
-            .toList() ??
-        [];
 
     return Scaffold(
       appBar: AppBar(
@@ -84,71 +56,90 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[850],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '방 정보',
-                      style: submenuTitleTextStyle,
-                    ),
-                    Divider(color: AppColors.faintGray.withOpacity(0.3)),
-                    const SizedBox(height: 8),
-                    Text(
-                      '방 번호: $roomNumber',
-                      style: submenuContentTextStyle,
-                    ),
-                    const Text(
-                      // TODO: QR code
-                      'QR: 123456',
-                      style: submenuContentTextStyle,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[850],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '플레이어 정보',
-                      style: submenuTitleTextStyle,
-                    ),
-                    Divider(color: AppColors.faintGray.withOpacity(0.3)),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      height: 100,
-                      child: ListView.builder(
-                        itemCount: players.length,
-                        itemBuilder: (context, index) {
-                          return Text(
-                            players[index],
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
+              Consumer<RoomDataProvider>(
+                builder: (context, roomDataProvider, child) {
+                  final roomNumber = roomDataProvider.roomData['_id'] ?? '';
+                  final players =
+                      (roomDataProvider.roomData['players'] as List<dynamic>?)
+                              ?.map((player) => player['userId'] as String)
+                              .toList() ??
+                          [];
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[850],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '방 정보',
+                              style: submenuTitleTextStyle,
                             ),
-                          );
-                        },
+                            Divider(
+                                color: AppColors.faintGray.withOpacity(0.3)),
+                            const SizedBox(height: 8),
+                            Text(
+                              '방 번호: $roomNumber',
+                              style: submenuContentTextStyle,
+                            ),
+                            // const Text(
+                            //   'QR: 123456',
+                            //   style: submenuContentTextStyle,
+                            // ),
+                          ],
+                        ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(height: size.height * 0.05),
-              CustomButton(
-                onTap: () => gameList(context),
-                text: '게임 선택',
+                      const SizedBox(height: 20),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[850],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '플레이어 정보',
+                              style: submenuTitleTextStyle,
+                            ),
+                            Divider(
+                                color: AppColors.faintGray.withOpacity(0.3)),
+                            const SizedBox(height: 8),
+                            SizedBox(
+                              height: 100,
+                              child: ListView.builder(
+                                itemCount: players.length,
+                                itemBuilder: (context, index) {
+                                  print("게임 플레이어 몇명???");
+                                  print(players);
+                                  return Text(
+                                    players[index],
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: size.height * 0.05),
+                      CustomButton(
+                        onTap: () => gameList(context),
+                        text: '게임 선택',
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),

@@ -56,7 +56,16 @@ class SocketService {
     _socketClient.on('joinRoomSuccess', (room) {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(room);
+
       Navigator.pushNamed(context, TicTacToeGameScreen.routeName);
+    });
+
+    _socketClient.on('updatePlayers', (players) {
+      RoomDataProvider roomDataProvider =
+          Provider.of<RoomDataProvider>(context, listen: false);
+      Map<String, dynamic> updatedRoomData = roomDataProvider.roomData;
+      updatedRoomData['players'] = players;
+      roomDataProvider.updateRoomData(updatedRoomData);
     });
   }
 
