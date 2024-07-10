@@ -13,6 +13,10 @@ class TicTacToeGameScreen extends StatefulWidget {
 class _TicTacToeGameScreenState extends State<TicTacToeGameScreen> {
   @override
   Widget build(BuildContext context) {
+    print("플레이 중인 친구들~~");
+    print(Provider.of<RoomDataProvider>(context).player1.userId);
+    print(Provider.of<RoomDataProvider>(context).player2.userId);
+
     print(Provider.of<RoomDataProvider>(context).roomData.toString());
     return const Scaffold();
   }

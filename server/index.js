@@ -94,6 +94,38 @@ io.on('connection', (socket) => {
       console.log(e);
     }
   });
+
+  socket.on('joinRoom', async ({ userId, roomId }) => {
+    try {
+      if (!roomId.match(/^[0-9a-fA-F]{24}$/)) {
+        socket.emit('errorOccurred', '유효한 방 번호를 입력해주세요.');
+        return;
+      }
+      let room = await Room.findById(roomId);
+
+      if (room.isJoin) {
+        let player = {
+          userId,
+          socketID: socket.id,
+          playerType: 'O',
+        };
+        socket.join(roomId);
+        room.players.push(player);
+        room.isJoin = false;
+        room = await room.save();
+        io.to(roomId).emit('joinRoomSuccess', room);
+        io.to(roomId).emit('updatePlayers', room.players);
+        io.to(roomId).emit('updateRoom', room);
+      } else {
+        socket.emit(
+          'errorOccurred',
+          '이 방은 이미 게임이 시작되어 참여가 불가합니다.'
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  });
 });
 
 server.listen(port, '0.0.0.0', () => {

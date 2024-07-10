@@ -1,3 +1,5 @@
+import 'package:client/common/utils/auth_storage.dart';
+import 'package:client/common/utils/socket_service.dart';
 import 'package:client/common/widgets/custom_elevated_button.dart';
 import 'package:client/common/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +14,23 @@ class JoinRoomScreen extends StatefulWidget {
 
 class _JoinRoomScreenState extends State<JoinRoomScreen> {
   final TextEditingController _gameIdController = TextEditingController();
+  final SocketService _socketService = SocketService();
+  late String userId;
 
   @override
   void initState() {
     super.initState();
+    _initializeUserId();
+    _socketService.joinRoomSuccessListener(context);
+    _socketService.errorOccuredListener(context);
+    _socketService.updatePlayersStateListener(context);
+  }
+
+  Future<void> _initializeUserId() async {
+    final id = await AuthStorage.getUserId();
+    setState(() {
+      userId = id!;
+    });
   }
 
   @override
@@ -53,7 +68,8 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
             ),
             SizedBox(height: size.height * 0.045),
             CustomButton(
-              onTap: () {},
+              onTap: () =>
+                  _socketService.joinRoom(userId, _gameIdController.text),
               text: '참가하기',
             ),
           ],
