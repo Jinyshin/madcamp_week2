@@ -2,9 +2,10 @@ import 'package:client/common/const/app_colors.dart';
 import 'package:client/common/const/app_text_style.dart';
 import 'package:client/common/widgets/confirm_dialog.dart';
 import 'package:client/common/widgets/custom_elevated_button.dart';
-import 'package:client/common/widgets/custom_textfield.dart';
+import 'package:client/data/provider/room_data_provider.dart';
 import 'package:client/ui/view/game_list_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateRoomScreen extends StatefulWidget {
   static String routeName = '/create-room';
@@ -16,8 +17,8 @@ class CreateRoomScreen extends StatefulWidget {
 
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
   final TextEditingController _nameController = TextEditingController();
-  // TODO: player list from server
-  final List<String> players = ['사용자1', '사용자2'];
+  List<String> players = [];
+  String roomNumber = '';
 
   void gameList(BuildContext context) {
     Navigator.pushNamed(context, GameListScreen.routeName);
@@ -26,6 +27,23 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
   @override
   void initState() {
     super.initState();
+    // roomDataProvider를 초기화 후 players 리스트를 업데이트
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateRoomNumberandPlayers();
+    });
+  }
+
+  void _updateRoomNumberandPlayers() {
+    RoomDataProvider roomDataProvider =
+        Provider.of<RoomDataProvider>(context, listen: false);
+    setState(() {
+      roomNumber = roomDataProvider.roomData['_id'] ?? '';
+      // roomDataProvider.roomData로부터 players 리스트를 업데이트
+      players = (roomDataProvider.roomData['players'] as List<dynamic>?)
+              ?.map((player) => player['userId'] as String)
+              .toList() ??
+          [];
+    });
   }
 
   @override
@@ -36,7 +54,19 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context);
     final size = MediaQuery.of(context).size;
+
+    // TODO: 사용자 id 추가되면 업데이트하기
+    print("방 만들기 화면에서 방데이터기다리는중");
+    print(roomDataProvider.roomData.toString());
+
+    roomNumber = roomDataProvider.roomData['_id'] ?? '';
+    // roomDataProvider.roomData의 변경이 있을 때 players 리스트를 업데이트
+    players = (roomDataProvider.roomData['players'] as List<dynamic>?)
+            ?.map((player) => player['userId'] as String)
+            .toList() ??
+        [];
 
     return Scaffold(
       appBar: AppBar(
@@ -69,9 +99,8 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                     ),
                     Divider(color: AppColors.faintGray.withOpacity(0.3)),
                     const SizedBox(height: 8),
-                    const Text(
-                      // TODO: random number
-                      '방 번호: 123456',
+                    Text(
+                      '방 번호: $roomNumber',
                       style: submenuContentTextStyle,
                     ),
                     const Text(

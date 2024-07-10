@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const playerSchema = new mongoose.Schema({
-  nickname: {
+  userId: {
     type: String,
     trim: true,
   },
@@ -18,4 +18,4 @@ const playerSchema = new mongoose.Schema({
   },
 });
 
-module.exports = playerSchema;
+export default playerSchema;

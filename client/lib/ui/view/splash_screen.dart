@@ -34,7 +34,6 @@ class _SplashScreenState extends State<SplashScreen> {
       context,
       MainMenuScreen.routeName,
       (route) => false,
-      arguments: {'userId': userId},
     );
   }
 

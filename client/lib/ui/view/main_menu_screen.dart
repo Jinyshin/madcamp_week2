@@ -1,3 +1,5 @@
+import 'package:client/common/utils/auth_storage.dart';
+import 'package:client/common/utils/socket_service.dart';
 import 'package:client/common/widgets/custom_elevated_button.dart';
 import 'package:client/ui/view/create_room_screen.dart';
 import 'package:client/ui/view/join_room_screen.dart';
@@ -7,21 +9,33 @@ import 'package:flutter/material.dart';
 
 class MainMenuScreen extends StatefulWidget {
   static String routeName = '/main-menu';
-  final String userId;
 
-  const MainMenuScreen({super.key, required this.userId});
+  const MainMenuScreen({super.key});
 
   @override
   State<MainMenuScreen> createState() => _MainMenuScreenState();
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
-  // final SocketService _socketService = SocketService();
+  final SocketService _socketService = SocketService();
+  late String userId;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeUserId();
+    _socketService.createRoomSuccessListener(context);
+  }
+
+  Future<void> _initializeUserId() async {
+    final id = await AuthStorage.getUserId();
+    setState(() {
+      userId = id!;
+    });
+  }
 
   void createRoom(BuildContext context) {
-    // TODO: 방을 새로 생성하고, response로 받은 방 번호를 보내야 할듯?->일단은 기획을 영상대로 하고 추후 변경하든가말든가
-
-    // _socketService.createRoom(widget.userId);
+    _socketService.createRoom(userId);
     Navigator.pushNamed(context, CreateRoomScreen.routeName);
   }
 
