@@ -8,7 +8,7 @@ class UserJoinRequest {
   final String displayName;
   final String email;
   final String id;
-  final String photoUrl;
+  final String? photoUrl;
 
   UserJoinRequest(
     this.displayName,

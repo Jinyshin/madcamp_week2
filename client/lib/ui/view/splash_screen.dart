@@ -40,9 +40,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void checkUserId() async {
     final userId = await AuthStorage.getUserId();
     // AuthStorage.delUserId(); // 임시 userId 삭제 코드
+    print("userid가 뭘까용");
+    print(userId);
 
     if (userId == null) {
       if (!mounted) return;
+      print('여기?');
       signup(context);
     } else {
       if (!mounted) return;
