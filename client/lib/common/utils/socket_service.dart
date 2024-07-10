@@ -47,7 +47,8 @@ class SocketService {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(room);
       // TODO: 빠른 구현을 위해 일단 틱택토로 라우팅해둠 -> GameListScreen 라우팅으로 수정하기
-      Navigator.pushNamed(context, TicTacToeGameScreen.routeName);
+
+      // Navigator.pushNamed(context, TicTacToeGameScreen.routeName);
     });
   }
 
